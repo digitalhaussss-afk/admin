@@ -258,6 +258,21 @@ html[dir="rtl"] .order-stage{direction:rtl}
 #googleAdminButton{margin:24px 0 12px;min-height:46px} .admin-state{border:1px solid #d9d5fa;border-radius:12px;background:#f7f6ff;padding:12px 15px;color:#4a4779;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
 .admin-state.error{border-color:#f3cdcd;background:#fff1f1;color:#a13b48} .ad-sync-state{font-size:12px;color:#757798;padding:8px 0 0}
 @media(max-width:700px){.admin-login-wrap{grid-template-columns:1fr}.admin-hero{padding:25px;min-height:225px}.admin-hero h1{font-size:34px}.admin-login-side{display:block;padding:32px 24px}}
+</style><style id="wspAdminModePatch">
+/* v16.1: Verified order identity and RSVP destination controls */
+.wsp-id-mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.wsp-id-mode-card{padding:16px;border-radius:16px;border:1px solid #e7e6f3;background:#fbfbff}
+.wsp-id-mode-card strong{font-size:13px;color:#303254}
+.wsp-id-mode-card p{font-size:12px;color:#797d99;line-height:1.55;margin:7px 0 12px}
+.wsp-id-mode-card .ad-input,.wsp-id-mode-card select{width:100%;min-height:40px}
+.wsp-id-mode-card label{display:block;font-size:11px;font-weight:750;color:#636784;margin:10px 0 5px}
+.wsp-mode-status{display:inline-flex;max-width:100%;margin:8px 0 3px;padding:6px 10px;border-radius:999px;color:#4d498f;background:#f1efff;font-size:11px;font-weight:800}
+.wsp-id-check{display:flex;align-items:flex-start;gap:7px;line-height:1.5;font-size:11px;color:#616681;margin:13px 0}
+.wsp-id-check input{margin-top:2px}
+.wsp-code-line{font:600 11px/1.5 ui-monospace,monospace;color:#69668d;word-break:break-all}
+.wsp-action-note{font-size:11px;line-height:1.55;color:#85899d;margin:9px 0 0}
+.wsp-mode-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+@media(max-width:750px){.wsp-id-mode-grid{grid-template-columns:1fr}}
 </style></head><body>
 <div id="adminGate" class="admin-login-wrap">
  <div class="admin-hero"><div class="mark" style="color:white"><span class="mark-icon">✦</span> The Wedding Space <span style="font-size:11px;background:#ffffff29;border-radius:99px;padding:7px 10px;letter-spacing:0">ADMIN</span></div>
@@ -293,10 +308,14 @@ html[dir="rtl"] .order-stage{direction:rtl}
     <div class="wsp-detail-head"><div><div class="ad-eyebrow">ORDER DETAIL / FORM RESPONSES</div><h1 id="wspOrderTitle">Order details</h1><p id="wspOrderSubtitle">Pilih pesanan untuk melihat isinya.</p><div class="wsp-summary-stats" id="wspOrderSummary"></div></div><div class="wsp-detail-actions"><span class="ad-pill" id="adSelectedCode">No selection</span><button class="ad-btn" id="wspDetailRefresh" type="button">↻ Refresh data</button></div></div>
     <div class="wsp-detail-layout">
       <nav class="wsp-section-toc" aria-label="Order form section navigation"><strong>Isi Form Order</strong>
-        <a href="#wsp-section-0">01 · Contact</a><a href="#wsp-section-1">02 · Package</a><a href="#wsp-section-2">03 · Couple details</a><a href="#wsp-section-3">04 · Events and venue</a><a href="#wsp-section-4">05 · Our Love Story</a><a href="#wsp-section-5">06 · RSVP setup</a><a href="#wsp-section-6">07 · Accommodation</a><a href="#wsp-section-7">08 · Transportation</a><a href="#wsp-section-8">09 · Photos and design</a><a href="#wsp-section-9">10 · Payment</a><a href="#wsp-section-10">11 · Agreement</a><a href="#wsp-delivery-card">Production & delivery</a><a href="#wsp-rsvp-card">RSVP Management</a>
+        <a href="#wsp-section-0">01 · Contact</a><a href="#wsp-section-1">02 · Package</a><a href="#wsp-section-2">03 · Couple details</a><a href="#wsp-section-3">04 · Events and venue</a><a href="#wsp-section-4">05 · Our Love Story</a><a href="#wsp-section-5">06 · RSVP setup</a><a href="#wsp-section-6">07 · Accommodation</a><a href="#wsp-section-7">08 · Transportation</a><a href="#wsp-section-8">09 · Photos and design</a><a href="#wsp-section-9">10 · Payment</a><a href="#wsp-section-10">11 · Agreement</a><a href="#wsp-identity-card">Order ID & RSVP mode</a><a href="#wsp-delivery-card">Production & delivery</a><a href="#wsp-rsvp-card">RSVP Management</a>
       </nav>
       <div class="wsp-main-detail">
         <div class="wsp-detail-card" id="wsp-answers-card"><div class="ad-card-head"><div><h3>Order form · Detail jawaban</h3><p>Section &amp; urutan mengikuti form asli. Copy setiap jawaban satu per satu untuk Atelier.</p></div></div><div class="ad-detail" id="adDetails"><div class="ad-empty">Memuat pesanan...</div></div></div>
+        <section id="wspModeIdentityCard" class="wsp-detail-card" aria-label="Order identity and RSVP destination">
+          <div class="ad-card-head" id="wsp-identity-card"><div><h3>Order Identity &amp; RSVP Destination</h3><p>Verified order code, response visibility and Google Sheets routing for this order.</p></div><span class="ad-pill ready">ADMIN</span></div>
+          <div id="wspModeIdentityMount" style="padding:18px 20px"><p class="ad-sync-state">Select an order to load settings.</p></div>
+        </section>
         <section id="wspRsvpPanel" class="wsp-detail-card" hidden><div class="ad-card-head" id="wsp-rsvp-card"><div><h3>RSVP Management · Atelier</h3><p>Kelola formulir dan respons RSVP pesanan ini</p></div><button id="wspCloseRSVP" class="ad-btn" type="button">✕ Close</button></div><div style="padding:18px"><p id="wspRsvpState" class="ad-sync-state" role="status">Pilih pesanan untuk mengatur RSVP.</p><div id="wspRsvpContent"></div></div></section>
         <div class="wsp-detail-card" id="wsp-delivery-card"><div class="ad-card-head"><div><h3>Production &amp; invitation delivery</h3><p>Atur status, publish URL undangan, lalu kirim lewat WhatsApp / email.</p></div></div><div style="padding:18px 22px"><div id="wspDeliveryMount"></div><button class="ad-btn primary" id="wspOpenRSVP" type="button">♡ Open RSVP Management for this client</button><p class="ad-detail-note">Publish to Client Dashboard menyimpan link HTTPS di Supabase. WhatsApp / Email menyiapkan draft; kamu tetap harus menekan Send.</p></div></div>
       </div>
@@ -389,8 +408,24 @@ async function loadOrders(){
       if(error)throw error;
       orders=(data||[]).map(row=>{
         const d=row.data||{},v=Array.isArray(row.wedding_deliveries)?row.wedding_deliveries[0]:row.wedding_deliveries;
-        return {...d,userId:row.user_id,orderId:row.order_id,email:row.account_email,submittedAt:d.submittedAt||row.created_at,
+        return {...d,code:d.code||d.orderCode||d.order_code||('SB-'+String(row.order_id).slice(0,8)),userId:row.user_id,orderId:row.order_id,email:row.account_email,submittedAt:d.submittedAt||row.created_at,
           productionStatus:v?.production_status||'pending',invitationUrl:v?.invitation_url||'',adminNotes:v?.admin_notes||'',rawData:d};
+      });
+      // Optional v16.1 add-on tables; failure does not block the existing order dashboard.
+      const [mapRes,modeRes,connRes]=await Promise.all([
+        sb.from('wedding_order_code_map').select('order_id,order_code,client_code'),
+        sb.from('wedding_rsvp_destinations').select('order_id,mode'),
+        sb.from('wedding_rsvp_sheet_connections').select('order_id,spreadsheet_id,tab_name,enabled')
+      ]);
+      if(mapRes.error||modeRes.error||connRes.error)console.warn('Order identity/RSVP extensions need staging SQL',mapRes.error||modeRes.error||connRes.error);
+      const codes=new Map((mapRes.data||[]).map(x=>[x.order_id,x]));
+      const modes=new Map((modeRes.data||[]).map(x=>[x.order_id,x]));
+      const conns=new Map((connRes.data||[]).map(x=>[x.order_id,x]));
+      orders.forEach(o=>{const m=codes.get(o.orderId)||{},c=conns.get(o.orderId)||{};
+        o.verifiedOrderCode=m.order_code||'';o.verifiedClientCode=m.client_code||'';
+        o.rsvpDestination=modes.get(o.orderId)?.mode||(c.enabled?'dashboard_and_sheets':'dashboard_only');
+        o.sheetConnected=!!c.spreadsheet_id;o.sheetEnabled=!!c.enabled;o.sheetTab=c.tab_name||'';
+        o.adminSettingsAvailable=!mapRes.error&&!modeRes.error&&!connRes.error;
       });
       const {data:setting,error:settingError}=await sb.from('wedding_settings').select('value').eq('key','support_number').maybeSingle();
       if(!settingError)$('#adSupportNumber').value=setting?.value||'';
@@ -428,7 +463,7 @@ function timeLabel(o){
 function recentOrdersHtml(items){
   if(!items.length)return '<div class="ad-empty wsp-recent-empty">Belum ada pesanan masuk. Pesanan yang dikirim klien akan muncul di sini.</div>';
   return items.map(o=>`<button type="button" class="wsp-recent-row" data-order="${esc(o.code)}" aria-label="Buka pesanan terbaru ${esc(o.code)}">
-    <span class="wsp-recent-person"><span class="ad-order-logo">${esc((displayName(o)||'?').charAt(0).toUpperCase())}</span><span class="wsp-recent-names"><strong>${esc(displayName(o))}${o.groomFull?' & '+esc(o.groomFull):''}</strong><small>${esc(o.code)} · ${esc(o.email||'')}</small></span></span>
+    <span class="wsp-recent-person"><span class="ad-order-logo">${esc((displayName(o)||'?').charAt(0).toUpperCase())}</span><span class="wsp-recent-names"><strong>${esc(displayName(o))}${o.groomFull?' & '+esc(o.groomFull):''}</strong><small>${esc(o.verifiedOrderCode||o.code)} · ${esc(o.email||'')}</small></span></span>
     <span class="wsp-recent-date">${esc(timeLabel(o))}</span><span class="ad-pill ${esc(validStatus(o.productionStatus))}">${esc(statusLabel[validStatus(o.productionStatus)])}</span><span class="wsp-recent-arrow" aria-hidden="true">→</span>
   </button>`).join('');
 }
@@ -459,23 +494,24 @@ function render(){
   $('#wspRecentOrders').innerHTML=recentOrdersHtml(recent);
   $('#wspRecentOrders').querySelectorAll('[data-order]').forEach(button=>button.addEventListener('click',()=>openOrder(button.dataset.order)));
   const q=$('#adSearch').value.toLowerCase().trim(),f=$('#adStatusFilter').value,mode=$('#adSortOrder').value;
-  const hits=sortedOrders(orders.filter(o=>(f==='all'||validStatus(o.productionStatus)===f||(f==='completed'&&['ready','delivered'].includes(validStatus(o.productionStatus))))&&[o.fullName,o.email,o.code,o.brideFull,o.groomFull,o.template].some(s=>String(s||'').toLowerCase().includes(q))),mode);
+  const hits=sortedOrders(orders.filter(o=>(f==='all'||validStatus(o.productionStatus)===f||(f==='completed'&&['ready','delivered'].includes(validStatus(o.productionStatus))))&&[o.fullName,o.email,o.code,o.verifiedOrderCode,o.verifiedClientCode,o.brideFull,o.groomFull,o.template].some(s=>String(s||'').toLowerCase().includes(q))),mode);
   $('#adOrderCount').textContent=hits.length+' orders';
   $('#wspListMeta').textContent=hits.length+' dari '+orders.length+' pesanan · '+({'newest':'Terbaru ke terlama','oldest':'Terlama ke terbaru','name':'Nama A ke Z'}[mode]||'Urutan terbaru');
   $('#adOrders').innerHTML=hits.length?hits.map(o=>`<button type="button" class="ad-order-row" data-order="${esc(o.code)}" aria-label="Buka detail pesanan ${esc(o.code)}">
     <span class="ad-order-logo">${esc((displayName(o)||'?').charAt(0).toUpperCase())}</span>
-    <span class="ad-order-details"><span class="ad-order-name">${esc(displayName(o))}${o.groomFull?' & '+esc(o.groomFull):''}</span><span class="ad-order-meta">${esc(o.code)} · ${esc(o.email)} · ${esc(shortDate(o.submittedAt))}</span></span>
+    <span class="ad-order-details"><span class="ad-order-name">${esc(displayName(o))}${o.groomFull?' & '+esc(o.groomFull):''}</span><span class="ad-order-meta">${esc(o.verifiedOrderCode||o.code)} · ${esc(o.email)} · ${esc(shortDate(o.submittedAt))}</span></span>
     <span class="ad-pill ${esc(validStatus(o.productionStatus))}">${esc(statusLabel[validStatus(o.productionStatus)])}</span><span class="wsp-visit">Lihat detail →</span></button>`).join(''):'<div class="ad-empty">Tidak ada pesanan sesuai filter. Pesanan klien tampil setelah dikirim.</div>';
   $('#adOrders').querySelectorAll('[data-order]').forEach(button=>button.addEventListener('click',()=>openOrder(button.dataset.order)));
   if(selected&&!orders.some(o=>o.code===selected)){selected='';pageMode='overview'}
   const current=orders.find(o=>o.code===selected);
   showAdminPage();
   if(pageMode==='detail'&&current){
-    $('#adSelectedCode').textContent=current.code;
+    $('#adSelectedCode').textContent=current.verifiedOrderCode||current.code;
     $('#wspOrderTitle').textContent=[current.brideFull,current.groomFull].filter(Boolean).join(' & ')||current.fullName||'Wedding order';
     $('#wspOrderSubtitle').textContent=(current.fullName||'Klien')+' · '+(current.email||'')+' · Submitted '+shortDate(current.submittedAt);
-    $('#wspOrderSummary').innerHTML=`<span>${esc(current.code)}</span><span>${esc(statusLabel[validStatus(current.productionStatus)])}</span><span>${esc(current.template||'Template belum dipilih')}</span>`;
+    $('#wspOrderSummary').innerHTML=`<span>${esc(current.verifiedOrderCode||current.code)}</span><span>${esc(statusLabel[validStatus(current.productionStatus)])}</span><span>${esc(current.template||'Template belum dipilih')}</span>`;
     renderDetails(current);
+    renderModeIdentity(current);
   }
 }
 $('#wspBackToOrders').onclick=()=>openOverview();
@@ -773,6 +809,76 @@ $('#adSaveSupport').onclick=async()=>{
   }
   catch(e){notice('Gagal menyimpan nomor: '+e.message)}finally{b.disabled=false}
 };
+// WSP Admin v16.1: role-gated order code mapping + three RSVP destinations.
+const WSP_MODES={dashboard_only:'Client Dashboard Only',dashboard_and_sheets:'Client Dashboard + Google Sheets',sheets_only:'Google Sheets Only'};
+let wspIdentitySaveBusy=false;
+function renderModeIdentity(order){
+ const mount=$('#wspModeIdentityMount');if(!mount||!order)return;
+ if(!sbAdmin){mount.innerHTML='<p class="ad-sync-state">Sign in with your approved Supabase admin account to view and update RSVP settings.</p>';return}
+ const status=order.rsvpDestination||'dashboard_only';
+ const sheetStatus=order.sheetConnected?(order.sheetEnabled?'Connected · Sync enabled':'Connected · Sync disabled'):'Not connected';
+ const code=order.verifiedOrderCode||'';
+ mount.innerHTML=`<div class="wsp-id-mode-grid">
+ <div class="wsp-id-mode-card"><strong>Order code mapping</strong><p>Sheet order code (WD) and client code (CL) linked to the Supabase order UUID. Save only after verifying the matching order.</p>
+ <div class="wsp-code-line">Supabase UUID: ${esc(order.orderId||'Unavailable')}</div>
+ <label for="wspVerifiedOrderCode">Verified sheet Order Code</label><input id="wspVerifiedOrderCode" class="ad-input" maxlength="28" autocomplete="off" placeholder="WD-0001" value="${esc(code)}" />
+ <label for="wspVerifiedClientCode">Verified sheet Client ID</label><input id="wspVerifiedClientCode" class="ad-input" maxlength="28" autocomplete="off" placeholder="CL-0001" value="${esc(order.verifiedClientCode||'')}" />
+ <label class="wsp-id-check"><input type="checkbox" id="wspMappingConfirmed"/> I verified these codes against the original order and submission receipt.</label>
+ <button class="ad-btn" id="wspSaveIdentity" type="button" ${order.adminSettingsAvailable?'':'disabled'}>Save verified mapping</button>
+ <p class="wsp-action-note" id="wspMappingState">${order.adminSettingsAvailable?'No verified codes? Leave empty until you confirm them.':'Install the included order code mapping SQL in a staging database first.'}</p></div>
+ <div class="wsp-id-mode-card"><strong>RSVP response destination</strong><p>Control which customer-facing destinations display RSVP results. Admin can still view internal responses in RSVP Management.</p>
+ <span class="wsp-mode-status">${esc(WSP_MODES[status]||status)}</span>
+ <label for="wspAdminRsvpDestination">Destination for this order</label><select class="ad-select" id="wspAdminRsvpDestination">
+ ${Object.entries(WSP_MODES).map(([id,label])=>`<option value="${id}" ${id===status?'selected':''}>${esc(label)}</option>`).join('')}
+ </select>
+ <p class="wsp-action-note">Google Sheets: ${esc(sheetStatus)}${order.sheetTab?' · Tab '+esc(order.sheetTab):''}</p>
+ <div class="wsp-mode-actions" style="margin-top:15px"><button class="ad-btn primary" id="wspSaveRsvpDestination" type="button" ${order.adminSettingsAvailable?'':'disabled'}>Save RSVP destination</button><button class="ad-btn" type="button" id="wspViewAdminRsvp">View responses</button></div>
+ <p class="wsp-action-note" id="wspDestinationState">Google Sheets modes require a spreadsheet already connected in Atelier.</p>
+ </div></div>`;
+ $('#wspSaveIdentity').onclick=()=>saveVerifiedOrderIdentity(order);
+ $('#wspSaveRsvpDestination').onclick=()=>saveAdminRsvpMode(order);
+ $('#wspViewAdminRsvp').onclick=()=>$('#wspOpenRSVP').click();
+}
+async function saveVerifiedOrderIdentity(o){
+ if(wspIdentitySaveBusy)return;
+ if(!sbAdmin||!o.orderId){notice('Sign in as an approved Supabase admin.');return}
+ const note=$('#wspMappingState'), code=$('#wspVerifiedOrderCode').value.trim().toUpperCase(),client=$('#wspVerifiedClientCode').value.trim().toUpperCase();
+ if(!/^WD-\d{4,}$/.test(code)){note.textContent='Enter a verified Order Code in WD-0001 format.';return}
+ if(client&&!/^CL-\d{4,}$/.test(client)){note.textContent='Client ID must use CL-0001 format.';return}
+ if(!$('#wspMappingConfirmed').checked){note.textContent='Check verification after confirming these codes against the original spreadsheet order.';return}
+ const b=$('#wspSaveIdentity');wspIdentitySaveBusy=true;b.disabled=true;note.textContent='Saving verified order code...';
+ try{
+  const {error}=await sb.from('wedding_order_code_map').upsert({order_id:o.orderId,order_code:code,client_code:client||null,verified_at:new Date().toISOString()},{onConflict:'order_id'});
+  if(error)throw error;
+  o.verifiedOrderCode=code;o.verifiedClientCode=client;
+  note.textContent='Verified mapping saved. The internal UUID was not changed.';
+  $('#wspMappingConfirmed').checked=false;
+  $('#adSelectedCode').textContent=code;
+  notice('Verified order code mapping saved.');
+ }catch(err){note.textContent='Mapping not saved: '+(err?.message||'Unknown error')}
+ finally{wspIdentitySaveBusy=false;b.disabled=false}
+}
+async function saveAdminRsvpMode(o){
+ if(wspIdentitySaveBusy)return;
+ if(!sbAdmin||!o.orderId){notice('Sign in as an approved Supabase admin.');return}
+ const next=$('#wspAdminRsvpDestination').value, note=$('#wspDestinationState');
+ if(!WSP_MODES[next])return;
+ if(next!=='dashboard_only'&&!o.sheetConnected){note.textContent='Connect a Google Sheet in Atelier before enabling a spreadsheet mode.';return}
+ const b=$('#wspSaveRsvpDestination');b.disabled=true;wspIdentitySaveBusy=true;note.textContent='Saving destination...';
+ try{
+  const {data,error}=await sb.auth.getSession();if(error||!data?.session?.access_token)throw Error('Sign in again to continue.');
+  const config=window.WSP_SUPABASE_CONFIG;
+  const res=await fetch(config.url+'/functions/v1/wsp-sheets',{method:'POST',headers:{apikey:config.anonKey,Authorization:'Bearer '+data.session.access_token,'Content-Type':'application/json'},body:JSON.stringify({action:'destination',order_id:o.orderId,destination:next})});
+  const response=await res.json().catch(()=>({}));
+  if(!res.ok||!response.ok)throw Error(response.error||'Could not save destination.');
+  o.rsvpDestination=response.destination;o.sheetEnabled=!!response.connection?.enabled;
+  note.textContent='Saved. The Admin RSVP view remains available in all three modes.';
+  const tag=$('#wspModeIdentityMount .wsp-mode-status');if(tag)tag.textContent=WSP_MODES[next];
+  notice('RSVP destination updated.');
+ }catch(err){note.textContent='Destination was not changed: '+(err?.message||'Unknown error')}
+ finally{wspIdentitySaveBusy=false;b.disabled=false}
+}
+
 // WSP RSVP v7: Runs INSIDE existing Admin Panel IIFE, after delivery event handlers.
 const RSVP_PUBLIC_URL='https://invitation.digitalhaus.online/invitation/rsvp.html';
 let rsvpActiveOwner='',rsvpForm=null,rsvpQuestions=[],rsvpGuests=[],rsvpRows=[],rsvpBusy=false;
@@ -821,7 +927,7 @@ function paintRSVP(){
  <div class="ad-grid-2" style="margin-top:14px"><div class="ad-field"><strong>Invitations</strong><p>${rsvpGuests.length} total · ${sent} sent · ${rsvpGuests.length-sent} not sent</p></div><div class="ad-field"><strong>RSVP Responses</strong><p>${rsvpRows.length} replied · ${attending} attendees · ${decline} declined</p></div></div>
  <div class="ad-field" style="margin-top:18px"><strong>RSVP Questions</strong><ol>${questions||'<li>No custom questions.</li>'}</ol></div>
  <div style="overflow-x:auto;margin-top:18px"><table style="width:100%;border-collapse:collapse;text-align:left"><thead><tr><th>Guest</th><th>Delivery</th><th>RSVP</th><th>Attendees</th><th>Answers</th></tr></thead><tbody>${rows||'<tr><td colspan="5">No guests registered yet.</td></tr>'}</tbody></table></div>
- <p class="ad-sync-state">RSVP questions are edited in Atelier Studio. Guest names, personal links and message delivery are managed in Client Panel. This Admin view is read-only.</p>`;
+ <p class="ad-sync-state">Admin can view RSVP responses in all destination modes, including Google Sheets Only. Questions are edited in Atelier; guest delivery is managed in Client Panel. This view is read-only.</p>`;
 }
 async function execRSVP(action,button){
  ensureAdmin();const o=ownerOrder();if(!o?.userId)throw Error('Pesanan belum dipilih.');
